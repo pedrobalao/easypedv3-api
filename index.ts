@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 //import { initializeApp, applicationDefault } from "firebase-admin/app";
@@ -8,6 +9,7 @@ import errorHandler from "./middlewares/error-handler.middleware";
 import logger from "./middlewares/logger.middleware";
 import checkAuthToken from "./middlewares/firebase-auth.middleware";
 
+import DrugsRoutes from "./routes/drugs.route";
 import * as admin from "firebase-admin";
 
 dotenv.config();
@@ -30,6 +32,7 @@ app.use(cors());
 app.use(checkAuthToken);
 app.use(logger);
 
+app.use("/api/drugs", DrugsRoutes.routes());
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });

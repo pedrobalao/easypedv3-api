@@ -1,6 +1,4 @@
 import { createPool, Pool } from "mysql";
-import { DATA_SOURCES } from "./../config/var.config";
-const dataSource = DATA_SOURCES.mySqlDataSource;
 
 let pool: Pool;
 
@@ -10,11 +8,19 @@ let pool: Pool;
 export const init = () => {
   try {
     pool = createPool({
-      connectionLimit: dataSource.DB_CONNECTION_LIMIT,
-      host: dataSource.DB_HOST,
-      user: dataSource.DB_USER,
-      password: dataSource.DB_PASSWORD,
-      database: dataSource.DB_DATABASE,
+      connectionLimit: process.env.MY_SQL_DB_CONNECTION_LIMIT
+        ? parseInt(process.env.MY_SQL_DB_CONNECTION_LIMIT)
+        : 4,
+      host: process.env.MY_SQL_DB_HOST,
+      port: process.env.MY_SQL_DB_PORT
+        ? parseInt(process.env.MY_SQL_DB_PORT)
+        : 3306,
+      user: process.env.MY_SQL_DB_USER,
+      password: process.env.MY_SQL_DB_PASSWORD,
+      database: process.env.MY_SQL_DB_DATABASE,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     });
 
     console.debug("MySql Adapter Pool generated successfully");
