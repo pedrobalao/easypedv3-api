@@ -6,6 +6,7 @@ import {
   Indication,
   Variable,
 } from "../models/drug.model";
+import { HttpRespException } from "../models/resource-not-found-error.model";
 import { DrugsQueries } from "../queries/drugs.queries";
 import { LoggingService } from "../services/logging.service";
 import { execute } from "../utils/mysql.connector";
@@ -29,11 +30,13 @@ export class DrugsController {
   async read(drugId: number): Promise<Drug> {
     let drug: Drug;
 
-    drug = await execute<Drug>(DrugsQueries.DrugById, [drugId]);
+    var drugs = await execute<Drug[]>(DrugsQueries.DrugById, [drugId]);
 
-    if (drug == null) {
-      return drug;
+    if (drugs == null || drugs.length == 0) {
+      throw new HttpRespException("NO_DATA_FOUND", 400);
     }
+
+    drug = drugs[0];
 
     var indicationProm = execute<Indication[]>(DrugsQueries.IndicationsbyDrug, [
       drugId,

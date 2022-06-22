@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, Router } from "express";
 import Container from "typedi";
 import { DrugsController } from "../controllers/drugs.controller";
+import { HttpRespException } from "../models/resource-not-found-error.model";
 
 export default class DrugsRoutes {
   static routes(): Router {
@@ -20,23 +21,27 @@ export default class DrugsRoutes {
     });
 
     router.get("/:drugId", async (req: Request, res: Response) => {
-      var drugIdStr = req.params["drugId"];
-
-      var drugId: number = -1;
-
       try {
-        drugId = parseInt(drugIdStr, 10);
-      } catch {
-        res.status(400).send("Invalid drugId");
+        var drugIdStr = req.params["drugId"];
+
+        var drugId: number = -1;
+
+        try {
+          drugId = parseInt(drugIdStr, 10);
+        } catch {
+          res.status(400).send("Invalid drugId");
+        }
+
+        var drug = await drugController.read(drugId);
+
+        res.status(200).json(drug);
+      } catch (error) {
+        if (error instanceof HttpRespException) {
+          res.status(404).send("Resource not found");
+          return;
+        }
+        res.status(500).send(error);
       }
-
-      var drug = await drugController.read(drugId);
-
-      if (drug == null) {
-        res.status(404).send("Resource not found");
-      }
-
-      res.status(200).json(drug);
     });
 
     return router;
