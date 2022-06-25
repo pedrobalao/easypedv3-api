@@ -60,3 +60,16 @@ export type Calculation = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CalculationResult = {
+  id: number;
+  description: String;
+  resultDescription: String;
+  resultIdUnit: String;
+  result: any;
+};
+
+export interface CalculationInput {
+  variable: String;
+  value: any;
+}

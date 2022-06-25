@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, Router } from "express";
 import Container from "typedi";
 import { DrugsController } from "../controllers/drugs.controller";
+import { CalculationInput } from "../models/drug.model";
 import { HttpRespException } from "../models/resource-not-found-error.model";
 
 export default class DrugsRoutes {
@@ -29,7 +30,7 @@ export default class DrugsRoutes {
         try {
           drugId = parseInt(drugIdStr, 10);
         } catch {
-          res.status(400).send("Invalid drugId");
+          throw new HttpRespException("Invalid drugId", 400);
         }
 
         var drug = await drugController.read(drugId);
@@ -37,12 +38,46 @@ export default class DrugsRoutes {
         res.status(200).json(drug);
       } catch (error) {
         if (error instanceof HttpRespException) {
-          res.status(404).send("Resource not found");
+          res.status(error.httpCode).send("Resource not found");
           return;
         }
         res.status(500).send(error);
       }
     });
+
+    router.post(
+      "/:drugId/calculations",
+      async (req: Request, res: Response) => {
+        try {
+          var drugIdStr = req.params["drugId"];
+
+          var drugId: number = -1;
+
+          try {
+            drugId = parseInt(drugIdStr, 10);
+          } catch {
+            throw new HttpRespException("Invalid drugId", 400);
+          }
+
+          var data: CalculationInput[];
+          try {
+            data = req.body as CalculationInput[];
+          } catch (error) {
+            throw new HttpRespException("Invalid payload", 400);
+          }
+
+          var calcsResult = await drugController.calculate(drugId, data);
+
+          res.status(200).json(calcsResult);
+        } catch (error) {
+          if (error instanceof HttpRespException) {
+            res.status(404).send("Resource not found");
+            return;
+          }
+          res.status(500).send(error);
+        }
+      }
+    );
 
     return router;
   }

@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use(checkAuthToken);
-app.use(logger);
+app.use(logger); 
 
 app.use("/api/drugs", DrugsRoutes.routes());
 app.get("/", (req: Request, res: Response) => {
