@@ -8,6 +8,7 @@ export type Drug = {
   comercialBrands: string;
   obs: string;
   presentation: string;
+  subcategoryDescription: string;
   createdAt: Date;
   updatedAt: Date;
   indications: Indication[];

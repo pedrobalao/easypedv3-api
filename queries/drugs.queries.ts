@@ -1,6 +1,7 @@
 export const DrugsQueries = {
   SearchDrugs: `
-    select distinct a.id, a.name, a.conterIndications, a.secondaryEfects as "secondaryEffects", a.comercialBrands, a.obs, a.presentation from Drug a join Indication b on (a.Id = b.DrugId) 
+    select distinct a.id, a.name, a.conterIndications, a.secondaryEfects as "secondaryEffects", a.comercialBrands, a.obs, a.presentation, s.description as "subcategoryDescription" from Drug a join Indication b on (a.Id = b.DrugId) 
+    join drugcategory d2 on (a.Id=d2.DrugId) join subcategory s on (d2.SubCategoryId= s.Id)
                     where upper(Name) like UPPER(CONCAT('%',?,'%')) or UPPER(ComercialBrands) like UPPER(CONCAT('%',?,'%')) or upper(IndicationText) like UPPER(CONCAT('%',?,'%'))
     `,
   IndicationsbyDrug: `
