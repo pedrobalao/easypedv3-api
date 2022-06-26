@@ -74,3 +74,7 @@ export interface CalculationInput {
   variable: String;
   value: any;
 }
+
+export interface FavouriteDrugInput {
+  drugId: number;
+}

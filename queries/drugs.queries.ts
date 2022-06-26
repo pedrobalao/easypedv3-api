@@ -49,4 +49,18 @@ export const DrugsQueries = {
   DrugById: `
     select a.id, a.name, a.conterIndications, a.secondaryEfects as "secondaryEffects", a.comercialBrands, a.obs, a.presentation from Drug a where a.Id = ? 
   `,
+  DrugFavourtiresByUserId: `
+    select a.id, a.name, a.conterIndications, a.secondaryEfects as "secondaryEffects", a.comercialBrands, a.obs, a.presentation, s.description as "subcategoryDescription" from Drug a 
+      join drugcategory d2 on (a.Id=d2.DrugId) join subcategory s on (d2.SubCategoryId= s.Id)
+      join favouritedrugs f on (a.Id = f.drugId) where f.userId = ?
+  `,
+  AddUserFavourite: `
+    insert into favouritedrugs(userId, drugId) values (?, ?)
+  `,
+  DeleteUserFavourite: `
+    delete from favouritedrugs where userId = ? and drugId = ?
+  `,
+  IsUserFavourite: `
+    select count(*) as "isFavourite" from favouritedrugs where userId = ? and drugId = ?
+  `,
 };

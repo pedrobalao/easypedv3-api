@@ -38,7 +38,7 @@ export default class DrugsRoutes {
         res.status(200).json(drug);
       } catch (error) {
         if (error instanceof HttpRespException) {
-          res.status(error.httpCode).send("Resource not found");
+          res.status(error.httpCode).send(error.message);
           return;
         }
         res.status(500).send(error);
@@ -71,7 +71,7 @@ export default class DrugsRoutes {
           res.status(200).json(calcsResult);
         } catch (error) {
           if (error instanceof HttpRespException) {
-            res.status(404).send("Resource not found");
+            res.status(error.httpCode).send(error.message);
             return;
           }
           res.status(500).send(error);

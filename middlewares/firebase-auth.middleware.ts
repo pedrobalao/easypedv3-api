@@ -17,7 +17,7 @@ async function checkAuthToken(req: Request, res: Response, next: NextFunction) {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    req.authID = decodedToken.ui;
+    req.authID = decodedToken.uid;
     req.authToken = idToken;
   } catch (err) {
     return res

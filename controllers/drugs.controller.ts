@@ -135,4 +135,49 @@ export class DrugsController extends BaseController {
     this._loggingService.debug("vars -> " + vars);
     return eval(vars);
   }
+
+  async userFavourites(userId: String): Promise<Drug[]> {
+    let ret: Drug[] = [];
+
+    ret = await execute<Drug[]>(DrugsQueries.DrugFavourtiresByUserId, [userId]);
+
+    return ret;
+  }
+
+  async addUserFavourites(userId: String, drugId: number): Promise<boolean> {
+    try {
+      const result = await execute<{ affectedRows: number }>(
+        DrugsQueries.AddUserFavourite,
+        [userId, drugId]
+      );
+      return result.affectedRows > 0;
+    } catch {
+      throw new HttpRespException("Invalid input", 400);
+    }
+  }
+
+  async deleteUserFavourites(userId: String, drugId: number): Promise<boolean> {
+    try {
+      const result = await execute<{ affectedRows: number }>(
+        DrugsQueries.DeleteUserFavourite,
+        [userId, drugId]
+      );
+      return result.affectedRows > 0;
+    } catch {
+      throw new HttpRespException("Invalid input", 400);
+    }
+  }
+
+  async isUserFavourite(userId: String, drugId: number): Promise<boolean> {
+    try {
+      const result = await execute<{ isFavourite: number }[]>(
+        DrugsQueries.IsUserFavourite,
+        [userId, drugId]
+      );
+
+      return result[0].isFavourite > 0;
+    } catch {
+      throw new HttpRespException("Drug is not a user favourite", 404);
+    }
+  }
 }
