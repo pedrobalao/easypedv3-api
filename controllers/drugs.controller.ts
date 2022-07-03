@@ -3,9 +3,11 @@ import {
   Calculation,
   CalculationInput,
   CalculationResult,
+  Category,
   Dose,
   Drug,
   Indication,
+  SubCategory,
   Variable,
 } from "../models/drug.model";
 import { HttpRespException } from "../models/resource-not-found-error.model";
@@ -179,5 +181,33 @@ export class DrugsController extends BaseController {
     } catch {
       throw new HttpRespException("Drug is not a user favourite", 404);
     }
+  }
+
+  async categoriesList(): Promise<Category[]> {
+    let ret: Category[] = [];
+
+    ret = await execute<Category[]>(DrugsQueries.CategoriesList, []);
+
+    return ret;
+  }
+
+  async subCategoriesList(categoryId: number): Promise<SubCategory[]> {
+    let ret: SubCategory[] = [];
+
+    ret = await execute<SubCategory[]>(DrugsQueries.SubCategoriesByCategoryId, [
+      categoryId,
+    ]);
+
+    return ret;
+  }
+
+  async drugsBySubCategoryId(subCategoryId: number): Promise<Drug[]> {
+    let ret: Drug[] = [];
+
+    ret = await execute<Drug[]>(DrugsQueries.DrugsBySubCategoryId, [
+      subCategoryId,
+    ]);
+
+    return ret;
   }
 }

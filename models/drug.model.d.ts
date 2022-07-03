@@ -70,6 +70,17 @@ export type CalculationResult = {
   result: any;
 };
 
+export type Category = {
+  id: number;
+  description: String;
+};
+
+export type SubCategory = {
+  id: number;
+  description: String;
+  categoryId: number;
+};
+
 export interface CalculationInput {
   variable: String;
   value: any;

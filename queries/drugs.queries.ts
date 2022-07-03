@@ -63,4 +63,16 @@ export const DrugsQueries = {
   IsUserFavourite: `
     select count(*) as "isFavourite" from favouritedrugs where userId = ? and drugId = ?
   `,
+  CategoriesList: `
+    select id, description from clinicalcategory c order by description
+  `,
+  SubCategoriesByCategoryId: `
+    select id, description, categoryId from subcategory s where categoryId = ? order by description
+  `,
+  DrugsBySubCategoryId: `
+    select distinct a.id, a.name, a.conterIndications, a.secondaryEfects as "secondaryEffects", a.comercialBrands, a.obs, a.presentation, s.description as "subcategoryDescription" 
+      from Drug a join Indication b on (a.Id = b.DrugId) 
+      join drugcategory d2 on (a.Id=d2.DrugId) join subcategory s on (d2.SubCategoryId= s.Id)
+          where d2.SubCategoryId = ? order by a.name
+  `,
 };

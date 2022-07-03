@@ -12,6 +12,7 @@ import checkAuthToken from "./middlewares/firebase-auth.middleware";
 import DrugsRoutes from "./routes/drugs.route";
 import * as admin from "firebase-admin";
 import UsersRoutes from "./routes/users.route";
+import CategoriesRoutes from "./routes/categories.route";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use(logger);
 
 app.use("/api/drugs", DrugsRoutes.routes());
 app.use("/api/users", UsersRoutes.routes());
+app.use("/api/categories", CategoriesRoutes.routes());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
