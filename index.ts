@@ -14,6 +14,7 @@ import * as admin from "firebase-admin";
 import UsersRoutes from "./routes/users.route";
 import CategoriesRoutes from "./routes/categories.route";
 import SurgeriesReferralRoutes from "./routes/surgeries-referral.route";
+import DiseasesRoutes from "./routes/diseases.route";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/drugs", DrugsRoutes.routes());
 app.use("/api/users", UsersRoutes.routes());
 app.use("/api/categories", CategoriesRoutes.routes());
 app.use("/api/surgeries-referral", SurgeriesReferralRoutes.routes());
+app.use("/api/diseases", DiseasesRoutes.routes());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
