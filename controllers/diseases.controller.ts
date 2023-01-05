@@ -1,15 +1,4 @@
-import { Container, Service } from "typedi";
-import {
-  Calculation,
-  CalculationInput,
-  CalculationResult,
-  Category,
-  Dose,
-  Drug,
-  Indication,
-  SubCategory,
-  Variable,
-} from "../models/drug.model";
+import { Service } from "typedi";
 import { HttpRespException } from "../models/resource-not-found-error.model";
 import { DiseasesQueries } from "../queries/diseases.queries";
 import { LoggingService } from "../services/logging.service";
