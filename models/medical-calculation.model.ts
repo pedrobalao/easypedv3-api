@@ -1,7 +1,7 @@
 export interface MedicalCalculation {
   id: number;
   description: string;
-  formula: string;
+  formula?: string;
   resultUnitId: string;
   observation: string;
   calculationGroupId: number;

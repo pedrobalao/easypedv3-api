@@ -23,12 +23,16 @@ export class MedicalCalculationsController extends BaseController {
   }
 
   async list(): Promise<MedicalCalculation[]> {
-    let ret: MedicalCalculation[] = [];
+    //let ret: MedicalCalculation[] = [];
 
-    ret = await execute<MedicalCalculation[]>(
+    let ret = await execute<MedicalCalculation[]>(
       MedicalCalculationsQueries.List,
       []
     );
+
+    ret.forEach((element) => {
+      delete element["formula"];
+    });
 
     return ret;
   }
@@ -58,14 +62,17 @@ export class MedicalCalculationsController extends BaseController {
 
     for (const element of queryVars) {
       if (element.type == "LISTVALUES") {
-        var queryVals = await execute<string[]>(
+        var queryVals = await execute<any>(
           MedicalCalculationsVariablesQueries.ListVariableValues,
           [element.variableId]
         );
-        element.values = queryVals;
+        element.values = queryVals.map((item: { value: any }) => {
+          return item.value;
+        });
       }
     }
 
+    delete ret["formula"];
     ret.variables = queryVars;
 
     return ret;
@@ -86,7 +93,7 @@ export class MedicalCalculationsController extends BaseController {
 
     let medicalcalculation = medicalcalculationArr[0];
 
-    let result = this.calculateInner(data, medicalcalculation.formula);
+    let result = this.calculateInner(data, medicalcalculation.formula!);
     let ret: CalculationResult;
 
     if (medicalcalculation.resultType == "NUMBER") {
