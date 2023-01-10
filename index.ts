@@ -16,6 +16,7 @@ import CategoriesRoutes from "./routes/categories.route";
 import SurgeriesReferralRoutes from "./routes/surgeries-referral.route";
 import DiseasesRoutes from "./routes/diseases.route";
 import MedicalCalculationsRoutes from "./routes/medical-calculations.route";
+import PercentilesRoutes from "./routes/percentiles.route";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/api/categories", CategoriesRoutes.routes());
 app.use("/api/surgeries-referral", SurgeriesReferralRoutes.routes());
 app.use("/api/diseases", DiseasesRoutes.routes());
 app.use("/api/medical-calculations", MedicalCalculationsRoutes.routes());
+app.use("/api/percentiles", PercentilesRoutes.routes());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
