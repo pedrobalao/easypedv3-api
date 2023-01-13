@@ -3,7 +3,11 @@ import Container from "typedi";
 import { HttpRespException } from "../models/resource-not-found-error.model";
 import { DiseasesController } from "../controllers/diseases.controller";
 import { PercentilesController } from "../controllers/percentiles.controller";
-import { PercentileInput } from "../models/percentile.model";
+import {
+  BMIInput,
+  BMIOutput,
+  PercentileInput,
+} from "../models/percentile.model";
 
 export default class PercentilesRoutes {
   static routes(): Router {
@@ -41,6 +45,27 @@ export default class PercentilesRoutes {
         }
 
         var calcsResult = await controller.Read("WEIGHT", data);
+
+        res.status(200).json(calcsResult);
+      } catch (error) {
+        if (error instanceof HttpRespException) {
+          res.status(error.httpCode).send(error.message);
+          return;
+        }
+        res.status(500).send(error);
+      }
+    });
+
+    router.post("/bmi", async (req: Request, res: Response) => {
+      try {
+        var data: BMIInput;
+        try {
+          data = req.body as BMIInput;
+        } catch (error) {
+          throw new HttpRespException("Invalid payload", 400);
+        }
+
+        var calcsResult = await controller.BMI(data);
 
         res.status(200).json(calcsResult);
       } catch (error) {

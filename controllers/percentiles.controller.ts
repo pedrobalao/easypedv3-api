@@ -3,10 +3,15 @@ import { HttpRespException } from "../models/resource-not-found-error.model";
 import { LoggingService } from "../services/logging.service";
 import { execute } from "../utils/mysql.connector";
 import { BaseController } from "./base.controller";
-import { PercentileInput, PercentileOutput } from "../models/percentile.model";
+import {
+  BMIInput,
+  BMIOutput,
+  PercentileInput,
+  PercentileOutput,
+} from "../models/percentile.model";
 import { PercentilesQueries } from "../queries/percentiles.queries";
 import { differenceInDays, differenceInMonths, parseISO, sub } from "date-fns";
-import { calculatePercentile } from "../utils/math.utils";
+import { calculatePercentile, round } from "../utils/math.utils";
 
 @Service()
 export class PercentilesController extends BaseController {
@@ -147,5 +152,38 @@ export class PercentilesController extends BaseController {
     };
 
     return output;
+  }
+  async BMI(bmiInput: BMIInput): Promise<BMIOutput> {
+    let bmiVal = round(
+      bmiInput.weight / ((bmiInput.length / 100) * (bmiInput.length / 100)),
+      2
+    );
+
+    let percInput: PercentileInput = {
+      birthdate: bmiInput.birthdate,
+      gender: bmiInput.gender,
+      value: bmiVal,
+    };
+
+    let percentile = await this.Read("BMI", percInput);
+
+    let result: string = "";
+    if (percentile.percentile < 5) {
+      result = "underweight";
+    } else if (percentile.percentile >= 5 && percentile.percentile <= 85) {
+      result = "healthy weight";
+    } else if (percentile.percentile > 85 && percentile.percentile <= 95) {
+      result = "overweight";
+    } else {
+      result = "obesity";
+    }
+
+    let ret: BMIOutput = {
+      bmi: bmiVal,
+      percentile: percentile.percentile,
+      result: result,
+    };
+
+    return ret;
   }
 }
