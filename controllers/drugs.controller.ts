@@ -18,6 +18,7 @@ import { BaseController } from "./base.controller";
 
 @Service()
 export class DrugsController extends BaseController {
+  private readonly _cacheCategoriesKey = "categories";
   constructor(public LoggingService: LoggingService) {
     super(LoggingService);
   }
@@ -186,7 +187,13 @@ export class DrugsController extends BaseController {
   async categoriesList(): Promise<Category[]> {
     let ret: Category[] = [];
 
-    ret = await execute<Category[]>(DrugsQueries.CategoriesList, []);
+    let retCache = this._myCache.get<Category[]>(this._cacheCategoriesKey);
+    if (retCache == undefined) {
+      ret = await execute<Category[]>(DrugsQueries.CategoriesList, []);
+      this._myCache.set<Category[]>(this._cacheCategoriesKey, ret, 3600);
+    } else {
+      ret = retCache;
+    }
 
     return ret;
   }

@@ -8,6 +8,8 @@ import { Disease } from "../models/disease.model";
 
 @Service()
 export class DiseasesController extends BaseController {
+  private readonly _cacheKey = "diseases";
+
   constructor(public LoggingService: LoggingService) {
     super(LoggingService);
   }
@@ -15,7 +17,13 @@ export class DiseasesController extends BaseController {
   async list(): Promise<Disease[]> {
     let ret: Disease[] = [];
 
-    ret = await execute<Disease[]>(DiseasesQueries.List, []);
+    let retCache = this._myCache.get<Disease[]>(this._cacheKey);
+    if (retCache == undefined) {
+      ret = await execute<Disease[]>(DiseasesQueries.List, []);
+      this._myCache.set<Disease[]>(this._cacheKey, ret, 3600);
+    } else {
+      ret = retCache;
+    }
 
     return ret;
   }

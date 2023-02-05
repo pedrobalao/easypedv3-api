@@ -18,21 +18,30 @@ import { round } from "../utils/math.utils";
 
 @Service()
 export class MedicalCalculationsController extends BaseController {
+  private readonly _cacheKey = "medicalCalculations";
+
   constructor(public LoggingService: LoggingService) {
     super(LoggingService);
   }
 
   async list(): Promise<MedicalCalculation[]> {
-    //let ret: MedicalCalculation[] = [];
+    let ret: MedicalCalculation[] = [];
 
-    let ret = await execute<MedicalCalculation[]>(
-      MedicalCalculationsQueries.List,
-      []
-    );
+    let retCache = this._myCache.get<MedicalCalculation[]>(this._cacheKey);
+    if (retCache == undefined) {
+      ret = await execute<MedicalCalculation[]>(
+        MedicalCalculationsQueries.List,
+        []
+      );
 
-    ret.forEach((element) => {
-      delete element["formula"];
-    });
+      ret.forEach((element) => {
+        delete element["formula"];
+      });
+
+      this._myCache.set<MedicalCalculation[]>(this._cacheKey, ret, 3600);
+    } else {
+      ret = retCache;
+    }
 
     return ret;
   }

@@ -17,6 +17,8 @@ import SurgeriesReferralRoutes from "./routes/surgeries-referral.route";
 import DiseasesRoutes from "./routes/diseases.route";
 import MedicalCalculationsRoutes from "./routes/medical-calculations.route";
 import PercentilesRoutes from "./routes/percentiles.route";
+import CongressesRoutes from "./routes/congresses.route";
+import NewsRoutes from "./routes/news.route";
 
 dotenv.config();
 
@@ -45,9 +47,11 @@ app.use("/api/surgeries-referral", SurgeriesReferralRoutes.routes());
 app.use("/api/diseases", DiseasesRoutes.routes());
 app.use("/api/medical-calculations", MedicalCalculationsRoutes.routes());
 app.use("/api/percentiles", PercentilesRoutes.routes());
+app.use("/api/congresses", CongressesRoutes.routes());
+app.use("/api/news", NewsRoutes.routes());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Ups...this is the root endpoint");
 });
 
 app.use(errorHandler);
