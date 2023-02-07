@@ -19,6 +19,7 @@ import MedicalCalculationsRoutes from "./routes/medical-calculations.route";
 import PercentilesRoutes from "./routes/percentiles.route";
 import CongressesRoutes from "./routes/congresses.route";
 import NewsRoutes from "./routes/news.route";
+import { cert } from "firebase-admin/app";
 
 dotenv.config();
 
@@ -26,6 +27,12 @@ admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: "https://easyped-894ba.firebaseio.com",
 });
+
+// credential: cert({
+//   projectId: "<PROJECT_ID>",
+//   clientEmail: "foo@<PROJECT_ID>.iam.gserviceaccount.com",
+//   privateKey: "-----BEGIN PRIVATE KEY-----<KEY>-----END PRIVATE KEY-----\n",
+// });
 
 const app: Express = express();
 const port = process.env.PORT ?? 3000;
