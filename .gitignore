@@ -42,3 +42,4 @@ dist/**/*
 yarn.lock
 
 easyped-894ba-firebase-adminsdk-599wo-cc481ae055.json
+firebase_key.json
