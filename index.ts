@@ -40,6 +40,8 @@ if (!fs.existsSync("firebase_key.json")) {
   console.log("file firebase_key.json already exists");
 }
 
+process.env["GOOGLE_APPLICATION_CREDENTIALS"] = "firebase_key.json";
+
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: "https://easyped-894ba.firebaseio.com",
