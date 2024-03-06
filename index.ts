@@ -21,6 +21,7 @@ import CongressesRoutes from "./routes/congresses.route";
 import NewsRoutes from "./routes/news.route";
 import { cert } from "firebase-admin/app";
 import fs from "fs";
+import EmergencyRoutes from "./routes/emergency.route";
 
 dotenv.config();
 
@@ -69,6 +70,7 @@ app.use("/api/medical-calculations", MedicalCalculationsRoutes.routes());
 app.use("/api/percentiles", PercentilesRoutes.routes());
 app.use("/api/congresses", CongressesRoutes.routes());
 app.use("/api/news", NewsRoutes.routes());
+app.use("/api/emergency", EmergencyRoutes.routes());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Ups...this is the root endpoint");
