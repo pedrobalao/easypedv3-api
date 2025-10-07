@@ -38,7 +38,7 @@ export const DrugsQueries = {
     select id,
     drugId,
     type,
-    function,
+    \`function\`,
     resultDescription,
     resultIdUnit,
     description,
